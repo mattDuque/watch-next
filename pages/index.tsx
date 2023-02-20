@@ -1,16 +1,24 @@
 import Head from "next/head"
 import Image from "next/image"
-
+import debounce from "lodash.debounce"
 import styles from "@/pages/index.module.css"
-import List from "@/components/Lits"
+import List from "@/components/List"
 import { useState } from "react"
 
 export default function Home() {
   const [inputText, setInputText] = useState("")
+
+  // Debounced function that calls the API
+  const handleAPICall = debounce(value => {
+    setInputText(value)
+
+    // Call your API here using the input value
+  }, 1500) // Wait for x milliseconds before making the API call
+
   let inputHandler = (e: { target: { value: string } }) => {
     //convert input text to lower case
     var lowerCase = e.target.value.toLowerCase()
-    setInputText(lowerCase)
+    handleAPICall(lowerCase)
   }
 
   return (
