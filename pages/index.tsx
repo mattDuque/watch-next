@@ -1,9 +1,18 @@
-import Head from 'next/head'
-import Image from 'next/image'
+import Head from "next/head"
+import Image from "next/image"
 
-import styles from '@/pages/index.module.css'
+import styles from "@/pages/index.module.css"
+import List from "@/components/Lits"
+import { useState } from "react"
 
 export default function Home() {
+  const [inputText, setInputText] = useState("")
+  let inputHandler = (e: { target: { value: string } }) => {
+    //convert input text to lower case
+    var lowerCase = e.target.value.toLowerCase()
+    setInputText(lowerCase)
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -19,6 +28,11 @@ export default function Home() {
         <p className={styles.description}>
           Get started by editing <code>pages/index.js</code>
         </p>
+
+        <div className="search">
+          <input type="text" onChange={inputHandler} />
+          <List input={inputText} />
+        </div>
       </main>
 
       <footer className={styles.footer}>
