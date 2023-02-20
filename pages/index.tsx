@@ -4,15 +4,30 @@ import debounce from "lodash.debounce"
 import styles from "@/pages/index.module.css"
 import List from "@/components/List"
 import { useState } from "react"
+import { Response, Search } from "types"
 
 export default function Home() {
   const [inputText, setInputText] = useState("")
+  const [listData, setListData] = useState<Search[] | string | null>(null)
 
   // Debounced function that calls the API
   const handleAPICall = debounce(value => {
-    setInputText(value)
-
-    // Call your API here using the input value
+    // If input is empty, clear the list
+    if (value.length > 0) {
+      setInputText(value)
+      // Call OMDb API
+      fetch(`http://www.omdbapi.com/?s=${value}&apikey=${process.env.NEXT_PUBLIC_OMDB_API_KEY}`)
+        .then(res => res.json())
+        .then((data: Response) => {
+          if (data.Response === "True") {
+            setListData(data.Search)
+          } else {
+            setListData(data.Error!)
+          }
+        })
+    } else {
+      setListData(null)
+    }
   }, 1500) // Wait for x milliseconds before making the API call
 
   let inputHandler = (e: { target: { value: string } }) => {
@@ -38,8 +53,8 @@ export default function Home() {
         </p>
 
         <div className="search">
-          <input type="text" onChange={inputHandler} />
-          <List input={inputText} />
+          <input type="text" placeholder="Search" onChange={inputHandler} />
+          <List input={inputText} listData={listData} />
         </div>
       </main>
 

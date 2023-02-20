@@ -1,11 +1,29 @@
-import { render, screen } from '@testing-library/react'
-import Home from '@/pages/index'
+import { render, screen } from "@testing-library/react"
+import Home from "@/pages/index"
+import List from "@/components/List"
 
-describe('Home', () => {
-  it('renders a heading', () => {
+const listData = [
+  {
+    Title: "The Godfather",
+    Year: "1972",
+    imdbID: "tt0068646",
+    Type: "movie",
+    Poster: "https://example.com/poster1.jpg",
+  },
+  {
+    Title: "The Dark Knight",
+    Year: "2008",
+    imdbID: "tt0468569",
+    Type: "movie",
+    Poster: "https://example.com/poster2.jpg",
+  },
+]
+
+describe("Home", () => {
+  it("renders a heading", () => {
     render(<Home />)
 
-    const heading = screen.getByRole('heading', {
+    const heading = screen.getByRole("heading", {
       name: /welcome to next\.js!/i,
     })
 
@@ -20,11 +38,27 @@ describe('Home', () => {
     expect(input).toBeInTheDocument()
   })
 
-  it("renders a list", () => {
-    render(<Home />)
+  it("renders a list of items based on the input", () => {
+    const inputText = "the"
+    render(<List input={inputText} listData={listData} />)
 
-    const list = screen.getByRole("list")
+    // Make sure the list is rendered
+    const listElement = screen.getByRole("list")
+    expect(listElement).toBeInTheDocument()
 
-    expect(list).toBeInTheDocument()
+    // Make sure the correct items are rendered
+    const listItemElements = screen.getAllByRole("listitem")
+    expect(listItemElements).toHaveLength(2)
+    expect(listItemElements[0]).toHaveTextContent("The Godfather")
+    expect(listItemElements[1]).toHaveTextContent("The Dark Knight")
+  })
+
+  it("renders nothing when the listData is null", () => {
+    const inputText = "the"
+    render(<List input={inputText} listData={null} />)
+
+    // Make sure nothing is rendered
+    const listElement = screen.queryByRole("list")
+    expect(listElement).not.toBeInTheDocument()
   })
 })
