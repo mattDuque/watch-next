@@ -11,4 +11,20 @@ describe('Home', () => {
 
     expect(heading).toBeInTheDocument()
   })
+
+  it("renders a search input", () => {
+    render(<Home />)
+
+    const input = screen.getByRole("textbox")
+
+    expect(input).toBeInTheDocument()
+  })
+
+  it("renders a list", () => {
+    render(<Home />)
+
+    const list = screen.getByRole("list")
+
+    expect(list).toBeInTheDocument()
+  })
 })
