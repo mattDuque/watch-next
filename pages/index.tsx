@@ -16,7 +16,7 @@ export default function Home() {
     if (value.length > 0) {
       setInputText(value)
       // Call OMDb API
-      fetch(`http://www.omdbapi.com/?s=${value}&apikey=${process.env.NEXT_PUBLIC_OMDB_API_KEY}`)
+      fetch(`http://www.omdbapi.com/?s=${value}&apikey=4a3b711b`)
         .then(res => res.json())
         .then((data: Response) => {
           if (data.Response === "True") {
@@ -52,8 +52,14 @@ export default function Home() {
           Get started by editing <code>pages/index.js</code>
         </p>
 
-        <div className="search">
-          <input type="text" placeholder="Search" onChange={inputHandler} />
+        <div className="justify-center xl:w-full py-2 border rounded-md shadow-sm outline-none focus-within:ring-indigo-500 focus-within:border-indigo-500 block sm:text-sm">
+          <input
+            onChange={inputHandler}
+            type="text"
+            className="w-full outline-none my-1 px-3 focus:bg-transparent"
+            id="search"
+            placeholder="Search"
+          />
           <List input={inputText} listData={listData} />
         </div>
       </main>
